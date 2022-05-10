@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "news" ADD COLUMN     "sentiment" DOUBLE PRECISION NOT NULL DEFAULT 0;

@@ -1,0 +1,21 @@
+const dotenv = require('dotenv');
+
+dotenv.config();
+
+const KEYWORD = {
+    PUB_SAVE_NEWS: 'KEY_SAVE_NEWS',
+    PUB_SCORE_NEWS: 'KEY_SCORE_NEWS',
+    PUB_POST_NEWS: 'KEY_POST_NEWS',
+    REDIS_HOST: process.env.REDIS_HOST,
+    REDIS_PORT: process.env.REDIS_PORT,
+    REDIS_PASSWORD: process.env.REDIS_PASSWORD,
+    API_KEY: process.env.ALPACA_API_KEY,
+    SECRET_KEY: process.env.ALPACA_SECRET_KEY,
+    TABLENAME_NEWS: 'news',
+    URL_SENTIMENT_ANALYSYS: process.env.URL_SENTIMENT_ANALYSYS,
+    POST_NEWS_URL: process.env.POST_NEWS_URL,
+    POST_NEWS_SYSOP_TOKEN: process.env.POST_NEWS_SYSOP_TOKEN,
+    ALPACA_HISTORICAL_NEWS_URL: process.env.ALPACA_HISTORICAL_NEWS_URL
+}
+
+module.exports = { KEYWORD }
