@@ -5,6 +5,16 @@ class RedisPubSub {
         this.publisher = null;
     }
 
+    async Connect() {
+        const client = createClient();
+        client.on('error', (err) => console.log('Redis Client Error', err));
+        await client.connect({
+            host: 'localhost',
+            port: 6379
+        });
+        this.publisher = client;
+    }
+
     async Subscribe(keyFuncList) {
         const client = createClient();
         client.on('error', (err) => console.log('Redis Client Error', err));

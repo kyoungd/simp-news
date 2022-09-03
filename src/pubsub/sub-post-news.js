@@ -3,10 +3,12 @@ const { KEYWORD } = require('../constants.js');
 const logger = require('../utility/logger.js');
 const TableNews = require('../db/db-news.js');
 const Util = require('../utility/util');
+const { join } = require('@prisma/client/runtime/index.js');
 
 class HttpGetMessage {
     constructor() {
-        this.token = KEYWORD.POST_NEWS_SYSOP_TOKEN;
+        this.apiKey = KEYWORD.API_KEY;
+        this.secretKey = KEYWORD.SECRET_KEY;
     }
 
     // singleton pattern
@@ -19,14 +21,24 @@ class HttpGetMessage {
 
     getHeader(token) {
         return {
-            headers: { Authorization: `Bearer ${token}` }
+            headers: {
+                'APCA-API-KEY-ID': this.apiKey,
+                'APCA-API-SECRET-KEY': this.secretKey
+            }
         };
     }
 
     async Run(url) {
-        const config = this.getHeader(this.token);
-        const result = await axios.get(url, config);
-        return result;
+        try {
+            const config = this.getHeader(this.token);
+            const result = await axios.get(url, config);
+            return result;
+        }
+        catch (e) {
+            logger.error(e)
+            logger.error(e.stack);
+            return null;
+        }
     }
 
 }
@@ -49,23 +61,33 @@ class SubscribePostNews {
 
     getHeader(token) {
         return {
-            headers: { Authorization: `Bearer ${token}` }
+            headers: { Authorization: `Bearer ${token}` },
+            "Content-Type": "application/json"
         };
     }
 
-    async PostData(url, token, textdata) {
-        const config = this.getHeader(token);
-        const bodyJson = textdata;
-        const result = await axios.post(url, bodyJson, config);
-        return result;
+    async PostData(url, token, message) {
+        try {
+            const config = this.getHeader(token);
+            const bodyJson = JSON.parse(message);
+            const result = await axios.post(url, bodyJson, config);
+            return result;
+        }
+        catch (e) {
+            logger.error(e)
+            logger.error(e.stack);
+            return null;
+        }
     }
 
     static process(message) {
         const app = SubscribePostNews.instance;
         (async () => {
-            const data = JSON.parse(message);
-            const result = await app.PostData(app.url, app.token, data);
-            await app.tnews.addIsPost(data.id);
+            const result = await app.PostData(app.url, app.token, message);
+            if (result !== null) {
+                const id = result.data.data.attributes.nid;
+                await app.tnews.addIsPost(id);
+            }
         })();
     }
 
@@ -75,4 +97,4 @@ class SubscribePostNews {
 
 }
 
-module.exports = (SubscribePostNews, HttpGetMessage};
+module.exports = {SubscribePostNews, HttpGetMessage};
