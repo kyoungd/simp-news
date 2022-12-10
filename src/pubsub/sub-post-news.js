@@ -47,7 +47,7 @@ class SubscribePostNews {
     constructor() {
         this.isRunning = false;
         this.url = KEYWORD.POST_NEWS_URL;
-        this.token = KEYWORD.POST_NEWS_SYSOP_TOKEN;
+        this.token = KEYWORD.POST_NEWS_SYSOP_TOKEN.jwt;
         this.tnews = new TableNews();
     }
 

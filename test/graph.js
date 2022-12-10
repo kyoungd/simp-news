@@ -4,7 +4,7 @@ const { KEYWORD } = require('../src/constants.js');
 (async () => {
     const postNews = SubscribePostNews.instance;
     url = KEYWORD.POST_NEWS_URL;
-    token = KEYWORD.POST_NEWS_SYSOP_TOKEN;
+    token = KEYWORD.POST_NEWS_SYSOP_TOKEN.jwt;
     message = `{"T": "n", "id": 28037396, "headline": "JMP Securities Maintains Market Outperform Rating for KKR &amp; Co: Here&#39;s What You Need To Know", "summary": "JMP Securities has decided to maintain its Market Outperform rating of KKR &amp; Co (NYSE:KKR) and lower its price target from $85.00 to $80.00. Shares of KKR &amp; Co are trading up 1.58% over the last 24 hours, at $48.02 per share.", "author": "Benzinga Insights", "created_at": "2022-07-12T16:19:29Z", "updated_at": "2022-07-12T16:19:30Z", "url": "https://www.benzinga.com/analyst-ratings/22/07/28037396/jmp-securities-maintains-market-outperform-rating-for-kkr-co-heres-what-you-need-to-know", "symbols": ["KKR"], "source": "benzinga", "sentiment": 0.50639187545 }`;
     const result = await postNews.PostData(url, token, message);
     console.log(result);

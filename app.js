@@ -4,6 +4,8 @@ const RedisPubSub = require('./src/redis-pubsub.js');
 const Util = require('./src/utility/util.js');
 const { HttpGetMessage } = require('./src/pubsub/sub-post-news.js');
 const { ChannelFunctionList, SetChanFuncPublisher } = require('./src/pubsub/channel-function-list.js');
+const GetJwt = require('./src/getJwt.js');
+const { transformSampleReply } = require('@redis/time-series/dist/commands/index.js');
 
 const redis = new RedisPubSub();
 const segment = 96;
@@ -53,6 +55,16 @@ const Run = async (endDate, numDays) => {
     const dStart = moment(endDate).add(numDays, 'days');
     const dEnd = moment(endDate);
     let index = 0;
+    
+    const timer = ms => new Promise( res => setTimeout(res, ms));
+
+    while(true) {
+        if (KEYWORD.POST_NEWS_SYSOP_TOKEN.jwt === '')
+            await timer(1000);
+        else
+            break;
+    }
+
     while (true) {
         try {
             const message = await getNews(dStart, index);
